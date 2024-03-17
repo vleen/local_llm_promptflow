@@ -1,0 +1,46 @@
+$schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  task:
+    type: string
+  model_path:
+    type: string
+    default: ../models/
+  model_filename:
+    type: string
+outputs:
+  llm_output:
+    type: string
+    reference: ${process_llm_output.output}
+nodes:
+- name: prompt
+  type: prompt
+  source:
+    type: code
+    path: ./components/prompt.jinja2
+  inputs:
+    task: ${inputs.task}
+- name: load_local_llama
+  type: python
+  source:
+    type: code
+    path: ./components/load_local_llama.py
+  inputs:
+    model_path: ${inputs.model_path}
+    model_filename: ${inputs.model_filename}
+- name: call_local_llama
+  type: python
+  source:
+    type: code
+    path: ./components/call_local_llama.py
+  inputs:
+    prompt: ${prompt.output}
+    llm: ${load_local_llama.output}
+- name: process_llm_output
+  type: python
+  source:
+    type: code
+    path: ./components/process_llm_output.py
+  inputs:
+    llm_output: ${call_local_llama.output}
