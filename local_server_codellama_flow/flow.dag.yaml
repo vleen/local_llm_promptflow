@@ -1,0 +1,39 @@
+$schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  task:
+    type: string
+    default: "I have a MySQL table with three columns: person_name, city, salary.
+      Write an SQL query that calculates the average salary per city."
+  llm_endpoint:
+    type: string
+    default: http://127.0.0.1:8000/predict
+outputs:
+  llm_output:
+    type: string
+    reference: ${process_llm_output.output}
+nodes:
+- name: prompt
+  type: prompt
+  source:
+    type: code
+    path: ./components/code_prompt.jinja2
+  inputs:
+    task: ${inputs.task}
+- name: call_local_llm_server
+  type: python
+  source:
+    type: code
+    path: ./components/call_local_llm_server.py
+  inputs:
+    max_tokens: 2048
+    user_input: ${prompt.output}
+    llm_endpoint: ${inputs.llm_endpoint}
+- name: process_llm_output
+  type: python
+  source:
+    type: code
+    path: ./components/process_llm_output.py
+  inputs:
+    llm_output: ${call_local_llm_server.output}
