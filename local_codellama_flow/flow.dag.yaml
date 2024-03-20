@@ -18,7 +18,7 @@ nodes:
   type: prompt
   source:
     type: code
-    path: ./components/prompt.jinja2
+    path: ./components/code_prompt.jinja2
   inputs:
     task: ${inputs.task}
 - name: load_local_llama
@@ -37,6 +37,7 @@ nodes:
   inputs:
     prompt: ${prompt.output}
     llm: ${load_local_llama.output}
+    max_tokens: 2048
 - name: process_llm_output
   type: python
   source:
