@@ -1,0 +1,5 @@
+local_llama_model:
+  model_path: "../models/codellama-13b-instruct.Q5_K_M.gguf"
+  chat_format: "llama-2"
+  use_mlock: True # force the system to keep the model in RAM
+  n_gpu_layers: -1  # set to 0 if you're running on CPU; -1 to unload all layers to GPU
