@@ -7,7 +7,6 @@ The repo contains two Promptflow flows:
 - ```local_codellama_flow``` -  naively loads a local model file each time it runs (i.e. simplest & most inefficient).
 - ```local_server_codellama_flow``` -  uses a local server to host the LLM.
 
----
 
 # Initial setup steps
 
@@ -76,7 +75,7 @@ It is NOT recommended to run batches with this flow, since loading the model at 
 ## ```local_server_codellama_flow```
 
 This flow involves a local server that the LLM sits in. The flow makes requests containing the user's inputs to this server in order to obtain responses from the LLM.
-=======
+
 If you have installed/changed any packages in the provided environment and wish to update it so that others can run your code, export the updated environment definition by running the command:
 
 
