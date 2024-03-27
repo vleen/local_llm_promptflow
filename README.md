@@ -2,13 +2,14 @@
 
 The purpose of this project is to serve as a template for local LLM experimentation using Promptflow.
 
-The repo contains two flows:
+The repo contains two Promptflow flows:
 
-- ```local_codellama_flow``` - Promptflow flow that naively loads a local model file each time it is run (i.e. simplest & most inefficient).
-- ```local_server_codellama_flow``` - Promptflow flow that sends request to a (local) LLM server.
+- ```local_codellama_flow``` -  naively loads a local model file each time it runs (i.e. simplest & most inefficient).
+- ```local_server_codellama_flow``` -  uses a local server to host the LLM.
+
+---
 
 # Initial setup steps
-
 
 ## 1. Conda environment setup
 
@@ -62,19 +63,22 @@ You can learn more about Promptflow from [the official docs](https://microsoft.g
 
 *Note: You can skip this step if you want to use Promptflow only from CLI/SDK, i.e. without the GUI provided by the VS Code plugin.*
 
+
 # Running the flows
 
 After going through the initial setup steps, you can start using the flows like so:
-
 ## ```local_codellama_flow```
 
-You can start running the flow (see the official Promptflow docs). Make sure to configure the flow inputs properly, according to your specific situation (e.g. ensure you point the flow to the right local model file).
+You can start running the flow (see [the official Promptflow docs](https://microsoft.github.io/promptflow/)). Make sure to configure the flow inputs properly, according to your specific situation (e.g. ensure you point the flow to the right local model file).
 
 It is NOT recommended to run batches with this flow, since loading the model at each inference is extremely inefficient.
 
 ## ```local_server_codellama_flow```
 
 This flow involves a local server that the LLM sits in. The flow makes requests containing the user's inputs to this server in order to obtain responses from the LLM.
+=======
+If you have installed/changed any packages in the provided environment and wish to update it so that others can run your code, export the updated environment definition by running the command:
+
 
 To use this flow:
 
@@ -97,7 +101,6 @@ In case you have used another address/port for the server in the previous step, 
 
 4. When you're done, kill the uvicorn server (```^C``` in the terminal).
 
-
 # Other considerations
 
 ## For contributors
@@ -110,4 +113,3 @@ Make sure the pre-commit hooks are installed before you start commiting to the r
 
 
 If you have installed/changed any packages in the provided environment, please update the ```environment.yml``` file **manually**. Exporting the file via ```conda export --from-history``` command seems to result in platform-dependent issues at times.
-
