@@ -89,8 +89,9 @@ The server sits in the ```/llm_server``` directory. Within this directory, there
 
  To start the server, run the following commands:
 
-```cd llm_server/``` (assuming you start in the root of the repository)
- ```uvicorn server:app --host 127.0.0.1 --port 8000``` (or whatever host and port you want).
+```cd llm_server/``` (assuming you start in the root of the repository);
+
+ ```uvicorn server:app --host 127.0.0.1 --port 8000``` (or whatever host and port you want);
 
 The server should now be running.
 
