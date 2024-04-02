@@ -5,6 +5,14 @@ Do not describe or explain the solution. Do not provide examples. Please wrap yo
 
 Write code to solve the following coding problem:   
 
-{{task}}
+{{user_input}}
+
+{% if chat_history is defined and chat_history|length > 0  %}
+    The user has previously asked these questions:
+    {% for historic_item in chat_history %}
+    user: {{ historic_item.inputs.user_input }}
+    assistant: {{ historic_item.outputs.chat_output }}
+    {% endfor %}
+{% endif %}
 
 [/INST]
