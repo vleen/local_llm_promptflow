@@ -14,34 +14,29 @@ class Prompt(BaseModel):
 models = {}
 
 
-def load_local_llama(
-    model_path: str,
-    chat_format: str = "llama-2",
-    use_mlock: bool = True,
-    n_gpu_layers: int = -1,
-) -> Llama:
-    llm = Llama(
-        model_path=model_path,
-        chat_format=chat_format,
-        use_mlock=use_mlock,
-        n_gpu_layers=n_gpu_layers,
-    )
-    return llm
+def load_local_llama(config_file_path: str = "server_config.yml") -> Llama:
+    try:
+        with open(config_file_path, "r") as server_config_file:
+            server_config = yaml.safe_load(server_config_file)
+            if not isinstance(server_config, dict):
+                raise ValueError("Invalid YAML file format")
+
+            if "local_llama_model" not in server_config:
+                raise KeyError("Key 'local_llama_model' not found in the YAML file")
+
+            llama_config = server_config["local_llama_model"]
+            return Llama(**llama_config)
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f"Config file '{config_file_path}' not found") from e
+    except yaml.YAMLError as e:
+        raise ValueError(f"Error loading YAML file: {e}") from e
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    with open("server_config.yml", "r") as server_config_file:
-        # TODO: validate server config params
-        server_config = yaml.safe_load(server_config_file)
-        llama_config = server_config["local_llama_model"]
-        llm = load_local_llama(
-            model_path=llama_config["model_path"],
-            chat_format=llama_config["chat_format"],
-            use_mlock=llama_config["use_mlock"],
-            n_gpu_layers=llama_config["n_gpu_layers"],
-        )
-        models["llm"] = llm
+
+    llm = load_local_llama()
+    models["llm"] = llm
     yield
     models.clear()
 
